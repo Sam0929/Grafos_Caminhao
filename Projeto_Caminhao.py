@@ -64,29 +64,21 @@ G.add_weighted_edges_from(edges_with_weights, weight = 'weight')
 
 #DESENHANDO O GRAFO
 draw_graph(G)
+plt.show()
 
-#DICIONARIO COM TODOS OS CAMINHOS DE UM NÓ SOURCE PARA UM TARGET, KEY = (source, target), values = [[caminho],[caminho],[...]]
-#OBS: PARA UMA ALTA QUANTIDADE DE NÓS, É INTERESSANTE USAR HAS_PATH ANTES, CASO CONTRARIO, ALLSIMPLEPATHS PODE SE TORNAR MUITO CUSTOSO
-paths_dict = {}
-for source_node, target_node in paths_to_take:
-     paths_dict[(source_node, target_node)] = list(
-        nx.all_simple_paths(G, source_node, target_node)
-     )
-     
-#LISTA QUE RECEBERA O CAMINHO COM MAIOR PESO MÍNIMO DE CADA CHAVE DO DICIONARIO
-greater_weight_path = []
-for pair, ways in paths_dict.items():
+G_maximum_tree = nx.maximum_spanning_tree(G, weight='weight', algorithm='kruskal', ignore_nan=False)
 
-    paths_with_weight = [(path, how_much_weight(G, path)) for path in ways]
+draw_graph(G_maximum_tree)
 
-    greater_weight_path.append(max(paths_with_weight, key=lambda x: min(x[1])))
+
+
 
     
-#EXIBINDO O MELHOR CAMINHO, CAMINHO COM MAIOR PESO MÍNIMO
-for path in greater_weight_path:
-    print(f"\n\nPara este caminho: {path[0]}")
-    print(f"Os pesos que os caminhos suportam são: {path[1]}")
-    print(f"O menor peso é: {min(path[1])}")
+# #EXIBINDO O MELHOR CAMINHO, CAMINHO COM MAIOR PESO MÍNIMO
+# for path in greater_weight_path:
+#     print(f"\n\nPara este caminho: {path[0]}")
+#     print(f"Os pesos que os caminhos suportam são: {path[1]}")
+#     print(f"O menor peso é: {min(path[1])}")
 
 
 plt.show()
