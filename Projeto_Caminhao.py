@@ -2,6 +2,8 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import math
 import numpy as np
+import random
+import scipy as sp
 
 
 I = 4  ## -> Numero de ilhas, nos
@@ -23,14 +25,38 @@ PATHS_TO_TAKE = [(1,4),
                  (4,3)]
 
 
+G = nx.Graph()
+
+# ADICIONANDO OS NOS
+G.add_nodes_from(NODES_IN_RANGE)
+
+# ADICIONANDO ARESTAS COM PESOS
+G.add_weighted_edges_from(EDGES_WITH_WEIGHTS, weight = 'weight')
+
+
+#GRAFO ALEATORIO
+N = 20
+P = 0.02 + (np.log(N) / N)
+
+G_teste = nx.fast_gnp_random_graph(N, P, seed = 60)
+
+for u, v in G_teste.edges():
+    G_teste[u][v]['weight'] = random.randint(1, 10)
+
+paths_to_take_random = [tuple(random.sample(range(1, 20), 2)) for node in range(N)]
+
+# G = G_teste
+
+# PATHS_TO_TAKE = paths_to_take_random
+
+
 def draw_graph(G, ax=None, node_color='lightblue', edge_color='b'):
     # Cria o layout
-    pos = nx.spring_layout(G, seed=7)
+    pos = nx.spring_layout(G, seed=10, method='energy')
 
     # Se não passar eixo, pega o atual
     if ax is None:
         ax = plt.gca()
-
     # Nós
     nx.draw_networkx_nodes(G, pos, node_size=400, node_color=node_color, ax=ax)
     # Arestas
@@ -60,34 +86,31 @@ def minimum_weight_path(G, path):
         weights.append(G[u][v]['weight'])
     return min(weights)
 
+def generate_max_tree(G):
+    G_max = nx.maximum_spanning_tree(G, weight='weight', algorithm='kruskal', ignore_nan=False)
+    return G_max
+
+def min_path_between_nodes(G, path):
+    min_path = []
+    for source_node, target_node in path:
+        aux = nx.shortest_path(G, source=source_node, target=target_node)
+        min_path.append(aux)
+    return min_path
 
 
-## CRIANDO O GRAFO
-G = nx.Graph()
 
-# ADICIONANDO OS NOS
-G.add_nodes_from(NODES_IN_RANGE)
+G_maximum_tree = generate_max_tree(G)
 
-# ADICIONANDO ARESTAS COM PESOS
-G.add_weighted_edges_from(EDGES_WITH_WEIGHTS, weight = 'weight')
+shortest_path_list = min_path_between_nodes(G_maximum_tree, PATHS_TO_TAKE)
+
+greater_weight_path = [minimum_weight_path(G_maximum_tree, path) for path in shortest_path_list]
 
 
-G_maximum_tree = nx.maximum_spanning_tree(G, weight='weight', algorithm='kruskal', ignore_nan=False)
+print('\nMaior peso para ir de A até B\n')
 
+for i, path in enumerate(PATHS_TO_TAKE):
 
-minimum_path_between_nodes = []
-
-for source_node, target_node in PATHS_TO_TAKE:
-    aux = nx.shortest_path(G_maximum_tree, source=source_node, target=target_node)
-    minimum_path_between_nodes.append(aux)
-
-
-greater_weight_path = [minimum_weight_path(G_maximum_tree, path) for path in minimum_path_between_nodes]
-
-
-print(greater_weight_path)
-
-
+    print(f'A:{path[0]}, B:{path[1]} Maior peso: {greater_weight_path[i]}\n')
 
 #DESENHANDO O GRAFO
 fig, axes = plt.subplots(1, 2, figsize=(12,6))
