@@ -25,31 +25,6 @@ PATHS_TO_TAKE = [(1,4),
                  (4,3)]
 
 
-G = nx.Graph()
-
-# ADICIONANDO OS NOS
-G.add_nodes_from(NODES_IN_RANGE)
-
-# ADICIONANDO ARESTAS COM PESOS
-G.add_weighted_edges_from(EDGES_WITH_WEIGHTS, weight = 'weight')
-
-
-#GRAFO ALEATORIO
-N = 20
-P = 0.02 + (np.log(N) / N)
-
-G_teste = nx.fast_gnp_random_graph(N, P, seed = 60)
-
-for u, v in G_teste.edges():
-    G_teste[u][v]['weight'] = random.randint(1, 10)
-
-paths_to_take_random = [tuple(random.sample(range(1, 20), 2)) for node in range(N)]
-
-# G = G_teste
-
-# PATHS_TO_TAKE = paths_to_take_random
-
-
 def draw_graph(G, ax=None, node_color='lightblue', edge_color='b'):
     # Cria o layout
     pos = nx.spring_layout(G, seed=10, method='energy')
@@ -98,19 +73,55 @@ def min_path_between_nodes(G, path):
     return min_path
 
 
+##CRIANDO GRAFO COM BASE NAS ESTRUTURAS FIXAS
+G = nx.Graph()
+
+# ADICIONANDO OS NOS
+G.add_nodes_from(NODES_IN_RANGE)
+
+# ADICIONANDO ARESTAS COM PESOS
+G.add_weighted_edges_from(EDGES_WITH_WEIGHTS, weight = 'weight')
+#
+
+
+#GRAFO ALEATORIO
+N = 100
+P = 0.02 + (np.log(N) / N)
+
+random.seed(12)
+
+G_teste = nx.gnp_random_graph(N, P, seed = 60)
+
+for u, v in G_teste.edges():
+    G_teste[u][v]['weight'] = random.randint(1, 10)
+
+paths_to_take_random = [tuple(random.sample(range(1, N), 2)) for node in range(N)]
+##
+
+
+#TROCANDO GRAFO
+G = G_teste
+
+PATHS_TO_TAKE = paths_to_take_random
+##
+
 
 G_maximum_tree = generate_max_tree(G)
 
 shortest_path_list = min_path_between_nodes(G_maximum_tree, PATHS_TO_TAKE)
 
-greater_weight_path = [minimum_weight_path(G_maximum_tree, path) for path in shortest_path_list]
+minimum_weight_in_the_path = [minimum_weight_path(G_maximum_tree, path) for path in shortest_path_list]
 
 
+
+#PRINTANDO MAIOR PESO ENTRE A E B
 print('\nMaior peso para ir de A até B\n')
 
 for i, path in enumerate(PATHS_TO_TAKE):
 
-    print(f'A:{path[0]}, B:{path[1]} Maior peso: {greater_weight_path[i]}\n')
+    print(f'A:{path[0]}, B:{path[1]} Maior peso: {minimum_weight_in_the_path[i]}\n')
+
+
 
 #DESENHANDO O GRAFO
 fig, axes = plt.subplots(1, 2, figsize=(12,6))
