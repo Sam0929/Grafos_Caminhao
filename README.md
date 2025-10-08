@@ -104,18 +104,21 @@ The script will print the path analysis results to the console and then display 
 
 The project follows a standard Python package structure to ensure organization and scalability.
 
-GRAFOS_CAMINHAO/
-└── Projeto_Caminhao/
-├── init.py
-├── main.py
-├── config.py
-├── graph_utils.py
-└── visualization.py
-├── .gitignore
-├── README.md
-├── requirements.txt
+```bash
+Grafos_Caminhao/
+├── Projeto_Caminhao/
+│   ├── __init__.py
+│   ├── main.py                # Main script for running the analysis
+│   ├── config.py              # Configuration file (parameters and constants)
+│   ├── graph_utils.py         # Graph generation and analysis utilities
+│   └── visualization.py       # Graph plotting and result visualization
+│
+├── .gitignore                 # Git ignore file
+├── README.md                  # Project documentation
+├── requirements.txt            # Python dependencies
 
 ---
+```
 
 ## 📄 License
 
