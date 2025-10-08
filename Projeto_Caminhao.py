@@ -72,6 +72,24 @@ def min_path_between_nodes(G, path):
         min_path.append(aux)
     return min_path
 
+def giant_fraction(c, tolerance=1e-9): # S me diz qual a probabilidade de um vertice estar em um componente gigante, 
+                                       #(componente gigante é um componente de um grafo aleatório que contém uma fração significativa dos vértices.)
+   
+    if c <= 1:
+        return 0.0
+    
+    s = 0.5
+    
+    while True:
+        next_s = 1 - math.exp(-c * s)
+      
+        if abs(next_s - s) < tolerance:
+            break
+        
+        s = next_s
+        
+    return s
+
 
 ##CRIANDO GRAFO COM BASE NAS ESTRUTURAS FIXAS
 G = nx.Graph()
@@ -85,9 +103,33 @@ G.add_weighted_edges_from(EDGES_WITH_WEIGHTS, weight = 'weight')
 
 
 #GRAFO ALEATORIO
-N = 100
-P = 0.02 + (np.log(N) / N)
 
+N = 1000
+
+P = 0.12 + (np.log(N) / N)
+
+P_10 = P * 0.10
+medium_degree = (N - 1) * P
+medium_degree_10 = (N - 1) * P_10
+
+
+N_values = list(range(N+1))
+S_values = []
+for N in N_values:
+    c = P_10 * (N - 1)     # grau médio esperado para esse N
+    S = giant_fraction(c)
+    S_values.append(S)
+
+plt.plot(N_values, S_values, label="S(N)")
+plt.xlabel("Número de vértices (N)")
+plt.ylabel("Fração do componente gigante (S)") # É relativa a proporção de vértices que pertencem ao componente gigante, ou seja, no nosso caso, que estão conectados por arestas de peso 10
+plt.title(f"Evolução de S com N (p={P})")
+plt.grid(True)
+plt.legend()
+plt.show()
+
+
+print(f'O grau médio do subgrafo com pesos 10 é de:{medium_degree_10}')
 random.seed(12)
 
 G_teste = nx.gnp_random_graph(N, P, seed = 60)
@@ -98,6 +140,8 @@ for u, v in G_teste.edges():
 paths_to_take_random = [tuple(random.sample(range(1, N), 2)) for node in range(N)]
 ##
 
+
+print(range(1000))
 
 #TROCANDO GRAFO
 G = G_teste
@@ -114,24 +158,27 @@ minimum_weight_in_the_path = [minimum_weight_path(G_maximum_tree, path) for path
 
 
 
-#PRINTANDO MAIOR PESO ENTRE A E B
-print('\nMaior peso para ir de A até B\n')
-
-for i, path in enumerate(PATHS_TO_TAKE):
-
-    print(f'A:{path[0]}, B:{path[1]} Maior peso: {minimum_weight_in_the_path[i]}\n')
 
 
 
-#DESENHANDO O GRAFO
-fig, axes = plt.subplots(1, 2, figsize=(12,6))
+# #PRINTANDO MAIOR PESO ENTRE A E B
+# print('\nMaior peso para ir de A até B\n')
 
-# Grafo original
-draw_graph(G, ax=axes[0], node_color='lightblue', edge_color='gray')
-axes[0].set_title("Grafo Original")
+# for i, path in enumerate(PATHS_TO_TAKE):
 
-# Árvore geradora
-draw_graph(G_maximum_tree, ax=axes[1], node_color='lightgreen', edge_color='gray')
-axes[1].set_title("Árvore Geradora Máxima")
+#     print(f'A:{path[0]}, B:{path[1]} Maior peso: {minimum_weight_in_the_path[i]}\n')
 
-plt.show()
+
+
+# #DESENHANDO O GRAFO
+# fig, axes = plt.subplots(1, 2, figsize=(12,6))
+
+# # Grafo original
+# draw_graph(G, ax=axes[0], node_color='lightblue', edge_color='gray')
+# axes[0].set_title("Grafo Original")
+
+# # Árvore geradora
+# draw_graph(G_maximum_tree, ax=axes[1], node_color='lightgreen', edge_color='gray')
+# axes[1].set_title("Árvore Geradora Máxima")
+
+# plt.show()
