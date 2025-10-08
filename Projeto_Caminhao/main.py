@@ -35,8 +35,9 @@ def main():
         vi.plot_graph_and_mst(G, G_max_tree)
 
     # Plotando estatisticas GNP
-    stats = gu.calculate_gnp_statistics(G.number_of_nodes(), cfg.P_PROBABILITY_FACTOR)
-    vi.plot_gnp_statistics(stats)
+    if mode == 'random':
+        stats = gu.calculate_gnp_statistics(G.number_of_nodes(), cfg.P_PROBABILITY_FACTOR)
+        vi.plot_gnp_statistics(stats)
  
     
 
