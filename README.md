@@ -104,3 +104,21 @@ The script will print the path analysis results to the console and then display 
 
 The project follows a standard Python package structure to ensure organization and scalability.
 
+GRAFOS_CAMINHAO/
+└── Projeto_Caminhao/
+├── init.py
+├── main.py
+├── config.py
+├── graph_utils.py
+└── visualization.py
+├── .gitignore
+├── README.md
+├── requirements.txt
+
+---
+
+## 📄 License
+
+Distributed under the MIT License.  
+You are free to use and modify this project as needed.
+
