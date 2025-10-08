@@ -47,7 +47,7 @@ Follow the steps below to set up the development environment locally.
 1. **Clone the repository:**
     ```bash
     git clone https://github.com/Sam0929/Grafos_Caminhao.git
-    cd Projeto_Caminhao
+    cd Grafos_Caminhao
     ```
 
 2. **Create and activate a virtual environment:**  
@@ -91,9 +91,9 @@ The main script can be configured to run in two modes:
     ```
 
 2. **Run the project:**  
-   From the **root folder** of the project (`Projeto_Caminhao/`), execute the following command:
+   From the **root folder** of the project (`Grafos_Caminhao/`), execute the following command:
     ```bash
-    python main.py
+    python ./Projeto_Caminhao/main.py
     ```
 
 The script will print the path analysis results to the console and then display the theoretical analysis plots.
