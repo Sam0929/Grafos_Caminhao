@@ -24,8 +24,7 @@ It is divided into two main functionalities:
 
 ## ✨ Features
 
-* Path capacity analysis based on the Maximum Spanning Tree.  
-* Modular and organized project structure separating configuration, logic, and visualization.  
+* Path capacity analysis based on the Maximum Spanning Tree.   
 * Generation of random graphs with weighted edges.  
 * Calculation and plotting of the **Giant Component Fraction (S)** as a function of N.  
 * Calculation and plotting of the **Expected Average Degree** as a function of N.  
